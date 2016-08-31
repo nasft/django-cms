@@ -89,6 +89,7 @@ class CMSPlugin(MPTTModel):
     lft = models.PositiveIntegerField(db_index=True, editable=False)
     rght = models.PositiveIntegerField(db_index=True, editable=False)
     tree_id = models.PositiveIntegerField(db_index=True, editable=False)
+    cmsplugin_hidden = models.BooleanField('Hide plugin contents', default=False)
     child_plugin_instances = None
 
     class Meta:
@@ -164,7 +165,7 @@ class CMSPlugin(MPTTModel):
 
     def render_plugin(self, context=None, placeholder=None, admin=False, processors=None):
         instance, plugin = self.get_plugin_instance()
-        if instance and not (admin and not plugin.admin_preview):
+        if instance and not (admin and not plugin.admin_preview) and not instance.cmsplugin_hidden:
             if not isinstance(placeholder, Placeholder):
                 placeholder = instance.placeholder
             placeholder_slot = placeholder.slot

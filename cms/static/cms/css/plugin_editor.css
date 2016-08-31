@@ -85,6 +85,9 @@ ul.plugin-list .text{
 	height:25px;
 	overflow: hidden;
 }
+ul.plugin-list .text.hidden-plugin {
+	text-decoration: line-through;
+}
 ul.plugin-list span.delete{
 	float:left;
 	height:28px;

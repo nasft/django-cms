@@ -76,6 +76,9 @@ class CMSPluginBaseMetaclass(forms.MediaDefiningClass):
                         }
                     )
                 ]
+        else:
+            # Insert a new fieldset at the beginning
+            new_plugin.fieldsets = [(None, {'fields': ('cmsplugin_hidden',)})] + list(new_plugin.fieldsets)
         # Set default name
         if not new_plugin.name:
             new_plugin.name = re.sub("([a-z])([A-Z])", "\g<1> \g<2>", name)
@@ -167,8 +170,9 @@ class CMSPluginBase(admin.ModelAdmin):
             for field in fields:
                 # assign all the fields - we can do this, because object is
                 # subclassing cms_plugin_instance (one to one relation)
-                value = getattr(self.cms_plugin_instance, field.name)
-                setattr(obj, field.name, value)
+                if field.name != 'cmsplugin_hidden':
+                    value = getattr(self.cms_plugin_instance, field.name)
+                    setattr(obj, field.name, value)
 
         # remember the saved object
         self.saved_object = obj
